@@ -4,7 +4,7 @@ package operator;
 public class Power extends operator {
     public Power(){
         this.precedence=0;
-        this.leftass=true;
+        this.leftAssociative=true;
     }
 
 

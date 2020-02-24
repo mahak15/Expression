@@ -4,7 +4,7 @@ package operator;
 public class Tan extends operator {
     public Tan(){
         this.precedence=0;
-        this.leftass=true;
+        this.leftAssociative=true;
     }
 
 

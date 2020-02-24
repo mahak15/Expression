@@ -4,7 +4,7 @@ package operator;
 public class Sin extends operator {
     public Sin(){
         this.precedence=0;
-        this.leftass=true;
+        this.leftAssociative=true;
     }
 
 

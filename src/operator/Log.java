@@ -1,20 +1,20 @@
 package operator;
 
 
-public class Mod extends operator {
-    public Mod(){
-        this.precedence=1;
+public class Log extends operator {
+    public Log(){
+        this.precedence=0;
         this.leftAssociative=true;
     }
 
 
     @Override
     public Double Solve(double a, double b) {
-        return a%b;
+        return 0.0;
     }
 
     @Override
     public Double solve(double a) {
-        return 0.0;
+        return Math.log(a);
     }
 }

@@ -3,7 +3,7 @@ package operator;
 public class Division extends operator {
     public Division(){
         this.precedence=1;
-        this.leftass=true;
+        this.leftAssociative=true;
     }
 
 

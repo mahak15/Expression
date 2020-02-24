@@ -4,7 +4,7 @@ package operator;
 public class Addition extends operator {
     public Addition(){
         this.precedence=2;
-        this.leftass=true;
+        this.leftAssociative=true;
     }
 
 

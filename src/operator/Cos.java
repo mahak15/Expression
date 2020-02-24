@@ -4,7 +4,7 @@ package operator;
 public class Cos extends operator {
     public Cos(){
         this.precedence=0;
-        this.leftass=true;
+        this.leftAssociative=true;
     }
 
 

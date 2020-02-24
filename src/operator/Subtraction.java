@@ -4,7 +4,7 @@ package operator;
     public class Subtraction extends operator {
         public Subtraction(){
             this.precedence=2;
-            this.leftass=true;
+            this.leftAssociative=true;
         }
 
 

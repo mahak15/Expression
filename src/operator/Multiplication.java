@@ -3,7 +3,7 @@ package operator;
 public class Multiplication extends operator {
     public Multiplication(){
         this.precedence=1;
-        this.leftass=true;
+        this.leftAssociative=true;
     }
 
 
