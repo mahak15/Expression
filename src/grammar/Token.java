@@ -1,5 +1,7 @@
 package grammar;
 
+import exception.CalException;
+
 public class Token {
 
     String type;
@@ -15,6 +17,7 @@ public class Token {
     }
 
     public String tokToString() {
+       // throw new CalException.TokenException ( this.type ,this.data );
         return "<" + type + "," + data + ">";
     }
 

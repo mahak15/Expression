@@ -1,5 +1,4 @@
 package operator;
-
 public abstract class operator {
    int precedence;
    Boolean leftAssociative=false;

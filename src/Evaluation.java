@@ -1,9 +1,8 @@
+import operator.*;
 public class Evaluation {
-    Evaluation(String expression) {
-
-    }
-
-    public static void eval(final String expression) {
-
+    public Double eval() {
+        Addition a = new Addition();
+        Double ans = a.Solve(5, 6);
+       return ans;
     }
 }
