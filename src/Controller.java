@@ -1,5 +1,5 @@
 import grammar.Lexer;
-import grammar.Node;
+
 import grammar.Parser;
 import grammar.Token;
 
@@ -10,21 +10,29 @@ public class Controller {
 
     String expression;
 
-    Controller(String exp)
-    {
-        this.expression=exp;
+    Controller(String exp) {
+        this.expression = exp;
     }
-    public String controller( ) {
-        Lexer lex = new Lexer(expression + '\0');
-        lex.tokenize();
 
+    public String controller() {
+        Lexer lex = new Lexer(expression + "\0");
+        lex.tokenize();
         ArrayList<Token> token_list = lex.getTokenized();
-        for (int i = 0; i < token_list.size(); i++) {
-            System.out.println(token_list.get(i).tokToString());
+        token_list.add(new Token("EOF", "EOF"));
+        for (Token token : token_list) {
+            System.out.println(token.tokToString() + " ");
         }
 
-     /*   Parser parseTree = new Parser(token_list,expression+'\0');
-        boolean isValid = getValidity(parseTree);
+        Parser parseTree = new Parser(token_list);
+        System.out.println(parseTree.isValid());
+        return "";
+    }
+}
+
+
+
+
+      /*  boolean isValid = getValidity(parseTree);
 
         if(isValid){
             String result = getResult(parseTree);
@@ -43,12 +51,9 @@ public class Controller {
         boolean valid=v.validate(parseTree);
         return valid;
     }
-    String getResult(Node parseTree)
+   String getResult(Node parseTree)
     {
-       // String result=new Evaluation(expression);
-      //  return result;
+        // String result=new Evaluation(expression);
+        //  return result;
     }*/
 
-     return "";
-    }
-}

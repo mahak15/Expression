@@ -7,15 +7,7 @@ public class Letters {
     Set<Character> Characters;
     Set<Character> Operators;
     Set<Character> Symbols;
-    String word = "";
 
-    ArrayList<String> trigoFunction = new ArrayList<String>(){
-        {
-            add("sin");
-            add("cos");
-            add("tan");
-        }
-    };
 
         Letters() {
             Number = new HashSet<>(Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'));
