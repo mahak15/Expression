@@ -87,7 +87,6 @@ public class Parser
             result=false;
 
         }
-
         else if (current_token.tokCheckType("operand"))
             current_token = nextToken();
         else {

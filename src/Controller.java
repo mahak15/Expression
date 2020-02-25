@@ -14,7 +14,7 @@ public class Controller {
         this.expression = exp;
     }
 
-    public String controller() {
+    public String control() {
         Lexer lex = new Lexer(expression + "\0");
         lex.tokenize();
         ArrayList<Token> token_list = lex.getTokenized();
