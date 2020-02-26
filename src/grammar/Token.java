@@ -30,6 +30,16 @@ public class Token {
         if (type.equals(str)) return true;
         else return false;
     }
+    public String getType()
+    {
+        return type;
+    }
+
+    public String getValue()
+    {
+        return data;
+    }
+
 }
 
 

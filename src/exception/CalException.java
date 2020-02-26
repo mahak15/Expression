@@ -18,6 +18,7 @@ public class CalException {
 
     public static class ParserException extends RuntimeException {
         public ParserException(String error) {
+
             super(error);
         }
     }
