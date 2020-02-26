@@ -1,4 +1,6 @@
-//import Evaluation.ExpressionTree;
+
+import Evaluation.ExpressionTree;
+import Evaluation.Node;
 import Evaluation.PostfixToken;
 import grammar.Lexer;
 
@@ -20,6 +22,7 @@ public class Controller {
         Lexer lex = new Lexer(expression + "\0");
         lex.tokenize();
         ArrayList<Token> token_list = lex.getTokenized();
+        ArrayList<String> postString = new ArrayList<>();
         token_list.add(new Token("EOF", "EOF"));
         for (Token token : token_list) {
             System.out.println(token.tokToString() + " ");
@@ -29,7 +32,13 @@ public class Controller {
         if (parseTree.isValid()) {
             PostfixToken pt = new PostfixToken();
             ArrayList<Token> list = pt.convertInfixToPostfix(token_list);
+            for(Token token:list) {
+                if(token.getValue()=="EOF")
+                    break;
+                postString.add(token.getValue());
+            }
             ExpressionTree et = new ExpressionTree();
+           Node root=et.constructTree(postString);
 
         } else {
             System.out.println("Please enter valid string of expression.");

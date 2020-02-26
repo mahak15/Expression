@@ -27,9 +27,6 @@ public class PostfixToken {
         }
         return -1;
     }
-  //  public PostfixToken(ArrayList<Token> tokens)  {
-     //   this.tokens = tokens;
-    //}
     public ArrayList<Token> convertInfixToPostfix(ArrayList<Token> tokens) {
         ArrayList<Token> postfixTokens = new ArrayList<>();
         Stack<Token> stack = new Stack<Token>();
