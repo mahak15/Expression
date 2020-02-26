@@ -8,7 +8,6 @@ import java.util.Stack;
 
 public class PostfixToken {
     ArrayList<Token> tokens;
-   // private Token token;
     Queue<Token> queue = new LinkedList<>();
     static int Prec(Token ch) {
         if (ch.tokCheckType("Operators")) {

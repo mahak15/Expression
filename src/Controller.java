@@ -1,3 +1,4 @@
+//import Evaluation.ExpressionTree;
 import Evaluation.PostfixToken;
 import grammar.Lexer;
 
@@ -25,19 +26,12 @@ public class Controller {
         }
 
         Parser parseTree = new Parser(token_list);
-        if(parseTree.isValid()) {
+        if (parseTree.isValid()) {
             PostfixToken pt = new PostfixToken();
             ArrayList<Token> list = pt.convertInfixToPostfix(token_list);
-            for (Token token : list) {
-                if(token.getValue()!="EOF") {
-                    System.out.println(token.getValue());
-                }
-;            }
+            ExpressionTree et = new ExpressionTree();
 
-        }
-
-
-        else{
+        } else {
             System.out.println("Please enter valid string of expression.");
         }
 
@@ -45,32 +39,3 @@ public class Controller {
         return 0.0;
     }
 }
-
-
-
-
-      /*  boolean isValid = getValidity(parseTree);
-
-        if(isValid){
-            String result = getResult(parseTree);
-            return result;
-
-        }else{
-            System.out.println("Wrong String");//Throw Exceptions.
-
-        }
-
-    }
-
-
-    Boolean getValidity(   Parser parseTree){
-        Validation v=new Validation();
-        boolean valid=v.validate(parseTree);
-        return valid;
-    }
-   String getResult(Node parseTree)
-    {
-        // String result=new Evaluation(expression);
-        //  return result;
-    }*/
-
