@@ -1,10 +1,7 @@
 package operator;
 
 public class Multiplication extends operator {
-    public Multiplication(){
-        this.precedence=1;
-        this.leftAssociative=true;
-    }
+
 
 
     @Override
@@ -13,7 +10,7 @@ public class Multiplication extends operator {
     }
 
     @Override
-    public Double solve(double a) {
+    public Double Solve(double a) {
         return 0.0;
     }
 }

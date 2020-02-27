@@ -2,10 +2,6 @@ package operator;
 
 
 public class Mod extends operator {
-    public Mod(){
-        this.precedence=1;
-        this.leftAssociative=true;
-    }
 
 
     @Override
@@ -14,7 +10,7 @@ public class Mod extends operator {
     }
 
     @Override
-    public Double solve(double a) {
+    public Double Solve(double a) {
         return 0.0;
     }
 }

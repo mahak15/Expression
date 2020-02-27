@@ -1,177 +1,234 @@
 package grammar;
-import java.util.*;
-public class Parser
-{
-    ArrayList<Token> token_list;
-    int tokenPointer;
-    Token current_token;
 
-    Token nextToken(){
-        tokenPointer++;
-        return token_list.get(tokenPointer);
+
+import java.util.ArrayList;
+
+public class Parser {
+    ArrayList<Token> tokenStream;
+    int tokPointer;
+    Node AST;
+    Token curTok;
+
+
+    Token nextToken() {
+        tokPointer++;
+        return tokenStream.get(tokPointer);
     }
 
+    NodePack expr() {
+        NodePack result = new NodePack();
+        NodePack a = new NodePack();
+        NodePack b = new NodePack();
+        NodePack c = new NodePack();
+        result.result = true;
 
-    Boolean factor(){
-        Boolean result = true;
-        if(current_token.tokCheckVal("(")){
-            current_token = nextToken();
-            if(expr() == false)
-                result = false;
-            else if(current_token.tokCheckVal(")") == false){
-                System.out.println(") expected -- syntax error");
-                result = false;
+        if((a = term()).result == false) result.result = false;
+        else if((b = eprime()).result == false) result.result = false;
+
+        if(result.result){
+            if(b.aNode.checkType("lol")){
+                result.aNode = a.aNode;
+            } else {
+                result.aNode = b.aNode;
+                result.aNode.addChild("left",a.aNode);
             }
-            else
-                current_token = nextToken();
         }
-        else if(current_token.tokCheckVal("sin")){
-            current_token = nextToken();
-            if(current_token.tokCheckVal("(")){
-                current_token = nextToken();
-                if(expr() == false)
-                    result = false;
-                else if(current_token.tokCheckVal(")") == false){
-                    System.out.println(") expected -- syntax error");
-                    result = false;
+        return result;
+    }
+
+    NodePack eprime(){
+        NodePack result = new NodePack();
+        NodePack a = new NodePack();
+        NodePack b = new NodePack();
+        NodePack c = new NodePack();
+        result.result = true;
+        if (curTok.tokCheckVal("+")) {
+            result.aNode = new Node(curTok);
+            curTok = nextToken();
+
+            if ((a = term()).result == false) result.result = false;
+            else if ((b = eprime()).result == false) result.result = false;
+
+            if(result.result){
+                if(b.aNode.checkType("lol")){
+                    result.aNode.addChild("right",a.aNode);
+                } else {
+                    b.aNode.addChild("left",a.aNode);
+                    result.aNode.addChild("right",b.aNode);
                 }
-                else
-                    current_token = nextToken();
             }
-            else
-                result=false;
+        }
+        else if (curTok.tokCheckVal("-")) {
+            result.aNode = new Node(curTok);
+            curTok = nextToken();
+
+            if ((a = term()).result == false) result.result = false;
+            else if ((b = eprime()).result == false) result.result = false;
+
+            if(result.result){
+                if(b.aNode.checkType("lol")){
+                    result.aNode.addChild("right",a.aNode);
+                } else {
+                    b.aNode.addChild("left",a.aNode);
+                    result.aNode.addChild("right",b.aNode);
+                }
+            }
+        }
+        else {
+            result.result = true;
+        }
+        return result;
+    }
+
+    NodePack term(){
+        NodePack result = new NodePack();
+        NodePack a = new NodePack();
+        NodePack b = new NodePack();
+        NodePack c = new NodePack();
+        result.result = true;
+
+        if((a = factor()).result == false) result.result = false;
+        else if((b = tprime()).result == false) result.result = false;
+
+        if(result.result){
+            if(b.aNode.checkType("lol")){
+                result.aNode = a.aNode;
+            } else {
+                result.aNode = b.aNode;
+                result.aNode.addChild("left",a.aNode);
+            }
+        }
+        return  result;
+    }
+
+    NodePack tprime(){
+        NodePack result = new NodePack();
+        NodePack a = new NodePack();
+        NodePack b = new NodePack();
+        NodePack c = new NodePack();
+        result.result = true;
+        if (curTok.tokCheckVal("*")){
+            result.aNode = new Node(curTok);
+            curTok = nextToken();
+
+
+            if((a = factor()).result == false ) result.result = false;
+            else if((b = tprime()).result == false ) result.result = false;
+
+            if(result.result) {
+                if(b.aNode.checkType("lol")){
+                    result.aNode.addChild("right",a.aNode);
+                } else {
+                    b.aNode.addChild("left",a.aNode);
+                    result.aNode.addChild("right",b.aNode);
+                }
+            }
+        }
+        else if(curTok.tokCheckVal("/")){
+            result.aNode = new Node(curTok);
+            curTok = nextToken();
+            if((a = factor()).result == false ) result.result = false;
+            else if((b = tprime()).result == false ) result.result = false;
+
+            if(result.result) {
+                if(b.aNode.checkType("lol")){
+                    result.aNode.addChild("right",a.aNode);
+                } else {
+                    b.aNode.addChild("left",a.aNode);
+                    result.aNode.addChild("right",b.aNode);
+                }
+            }
+        }
+        else result.result = true;
+
+        return result;
+    }
+
+    NodePack factor(){
+        NodePack result = new NodePack();
+        NodePack a = new NodePack();
+        NodePack b = new NodePack();
+        NodePack c = new NodePack();
+        result.result = true;
+
+        if(curTok.tokCheckVal("(")){
+            curTok = nextToken();
+
+            if((a = expr()).result == false){
+                result.result = false;
+            }
+            else if(curTok.tokCheckVal(")") == false){
+                result.result = false;
+                System.out.println("Syntax error (expr): ')' expected ");
+            }
+
+            else curTok = nextToken();
+            if(result.result){
+                result.aNode = a.aNode;
+            }
+        }
+        else if(curTok.tokCheckType("trigonometric") || curTok.tokCheckType("logarithmic")){
+            result.aNode = new Node(curTok);
+            curTok = nextToken();
+            if(curTok.tokCheckVal("(")){
+                curTok = nextToken();
+                if((a = expr()).result == false) result.result = false;
+                else if(curTok.tokCheckVal(")") == false) {
+                    result.result = false;
+                    System.out.println("Syntax error f(x): ')' expected ");
+                }
+                else curTok = nextToken();
+                if(result.result){
+                    result.aNode.addChild("only",a.aNode);
+                }
+            } else {
+                System.out.println("syntax error");
+                result.result = false;
+            }
 
         }
-        else if(current_token.tokCheckVal("cos")){
-            current_token = nextToken();
-            if(current_token.tokCheckVal("(")){
-                current_token = nextToken();
-                if(expr() == false)
-                    result = false;
-                else if(current_token.tokCheckVal(")") == false){
-                    System.out.println(") expected -- syntax error");
-                    result = false;
-                }
-                else
-                    current_token = nextToken();
-            }
-            result=false;
+        else if(curTok.tokCheckType("operand")){
+            result.aNode = new Node(curTok);
+            curTok = nextToken();
         }
-        else if(current_token.tokCheckVal("tan")){
-            current_token = nextToken();
-            if(current_token.tokCheckVal("(")){
-                current_token = nextToken();
-                if(expr() == false)
-                    result = false;
-                else if(current_token.tokCheckVal(")") == false){
-                    System.out.println(") expected -- syntax error");
-                    result = false;
-                }
-                else
-                    current_token = nextToken();
-            }
-        }
-        else if(current_token.tokCheckVal("log")){
-            current_token = nextToken();
-            if(current_token.tokCheckVal("(")){
-                current_token = nextToken();
-                if(expr() == false)
-                    result = false;
-                else if(current_token.tokCheckVal(")") == false){
-                    System.out.println(") expected -- syntax error");
-                    result = false;
-                }
-                else
-                    current_token = nextToken();
-            }
-            result=false;
-
-        }
-        else if (current_token.tokCheckType("operand"))
-            current_token = nextToken();
         else {
             System.out.println("Syntax Error !");
-            result = false;
+            result.result = false;
         }
         return result;
-    }
-
-    Boolean tprime(){
-        Boolean result = true;
-        if(current_token.tokCheckVal("*")){
-            current_token = nextToken();
-            if (factor() == false)
-                result = false;
-            else if (tprime() == false)
-                result = false;
-        }
-        else if(current_token.tokCheckVal("/")){
-            current_token = nextToken();
-            if (factor() == false)
-                result = false;
-            else if (tprime() == false)
-                result = false;
-        }
-        else
-            result = true;
-        return result;
-    }
-
-    Boolean term(){
-        Boolean result = true;
-        if(factor() == false)
-            result = false;
-        else if (tprime() == false)
-            result = false;
-        return result;
-    }
-
-    Boolean eprime(){
-        Boolean result = true;
-        if(current_token.tokCheckVal("+")){
-            current_token = nextToken();
-            if(term() == false)
-                result = false;
-            else if(eprime() == false)
-                result = false;
-        }
-        else if(current_token.tokCheckVal("-")){
-            current_token = nextToken();
-            if(term() == false)
-                result = false;
-            else if(eprime() == false)
-                result = false;
-        }
-        else
-            result = true;
-
-        return  result;
-    }
-
-    Boolean expr(){
-        Boolean result = true;
-        if (term() == false)
-            result = false;
-        else if (eprime() == false)
-            result = false;
-        return  result;
     }
 
     public Boolean isValid(){
-        current_token = nextToken();
-        if(expr() != false)
+        curTok = nextToken();
+        NodePack am = expr();
+        if(am.result == false){
+            System.out.println("parse failed");
+            return  false;
+        }
+        else {
+            AST.addChild("only",am.aNode);
+            System.out.println("parse success");
             return true;
-        else
-            return false;
+        }
     }
 
-    public Parser(ArrayList<Token> list){
-        token_list = list;
-        tokenPointer = -1;
-        current_token = new Token("p","p");
+    public Parser(ArrayList<Token> list) {
+        tokenStream = list;
+        tokPointer = -1;
+        AST = new Node(new Token("root","root"));
+        curTok = new Token("LOL", "LOL");
     }
 
+    public Node getAST() {
+        return AST;
+    }
+    public void printAST(){
+        AST.printTree();
+
+    }
+    public Double getValue()
+    {
+      double result=  AST.eval();
+        return result;
+    }
 }
-
-
-

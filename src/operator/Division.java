@@ -3,10 +3,6 @@ import exception.CalException;
 
 import java.lang.*;
 public class Division extends operator {
-    public Division(){
-        this.precedence=1;
-        this.leftAssociative=true;
-    }
 
 
     @Override
@@ -21,7 +17,7 @@ public class Division extends operator {
 
 
     @Override
-    public Double solve(double a) {
+    public Double Solve(double a) {
         return 0.0;
     }
 }

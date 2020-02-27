@@ -1,3 +1,5 @@
+
+
 package grammar;
 import java.util.*;
 
@@ -5,36 +7,37 @@ public class Lexer {
     String expression;
     char[] exparray;
     ArrayList<Token> tokenized;
-    Letters letter;
+    Letters tr;
+    Set<Character> at;
 
     int pointer;
 
-    enum operatorState{
+    enum opState{
         OPw,OPd,accept
     };
     Token operand() {
         Token operand = new Token("operand","");
         operand.buildToken(exparray[pointer-1]);
 
-        operatorState opSt = operatorState.OPw;
+        opState opSt = opState.OPw;
         while (true) {
 
             switch(opSt){
-                case OPw:   if (letter.getType(exparray[pointer]).equals("Number")){
-                    opSt = operatorState.OPw;
+                case OPw:   if (tr.getType(exparray[pointer]).equals("Number")){
+                    opSt = opState.OPw;
                     operand.buildToken(exparray[pointer]);
                     pointer++;
                 }
                 else if (exparray[pointer] == '.'){
-                    opSt = operatorState.OPd;
+                    opSt = opState.OPd;
                     operand.buildToken(exparray[pointer]);
                     pointer++;
                 }
-                else opSt = operatorState.accept;
+                else opSt = opState.accept;
                     break;
 
-                case OPd:   if (letter.getType(exparray[pointer]).equals("Number")){
-                    opSt = operatorState.OPd;
+                case OPd:   if (tr.getType(exparray[pointer]).equals("Number")){
+                    opSt = opState.OPd;
                     operand.buildToken(exparray[pointer]);
                     pointer++;
                 }
@@ -42,7 +45,7 @@ public class Lexer {
                     System.out.println("decimal syntax error");
                     System.exit(0);
                 }
-                else opSt = operatorState.accept;
+                else opSt = opState.accept;
                     break;
 
                 case accept:    return operand;
@@ -275,13 +278,13 @@ public class Lexer {
         l,o2,g,accept
     };
     Token log(){
-        Token logg = new Token("logarithmic","");
-        logg.buildToken(exparray[pointer-1]);
+        Token loggo = new Token("logarithmic","");
+        loggo.buildToken(exparray[pointer-1]);
         logState st = logState.l;
         while(true) {
             switch(st){
                 case l: if(exparray[pointer] == 'o') {
-                    logg.buildToken('o');
+                    loggo.buildToken('o');
                     pointer++;
                     st = logState.o2;
                 }
@@ -291,7 +294,7 @@ public class Lexer {
                 }
                     break;
                 case o2: if(exparray[pointer] == 'g') {
-                    logg.buildToken('g');
+                    loggo.buildToken('g');
                     pointer++;
                     st = logState.g;
                 }
@@ -302,7 +305,7 @@ public class Lexer {
                     break;
                 case g: st = logState.accept;
                     break;
-                case accept: return logg;
+                case accept: return loggo;
             }
         }
 
@@ -312,69 +315,89 @@ public class Lexer {
 
     public  void   tokenize() {
         while (exparray[pointer] != '\0'){
-            if( exparray[pointer] == '(' ){
-                pointer++;
-                tokenized.add(leftParen());
+            if (at.contains(exparray[pointer]) || (tr.getType(exparray[pointer]).equals("Number")) ){
+
+                if ( (tr.getType(exparray[pointer]).equals("Number")) ) {
+                    pointer++;
+                    tokenized.add(operand());
+                }
+                if( exparray[pointer] == '(' ){
+                    pointer++;
+                    tokenized.add(leftParen());
+                }
+
+                if( exparray[pointer] == ')' ){
+                    pointer++;
+                    tokenized.add(rightParen());
+                }
+                if( exparray[pointer] == '+' ){
+                    pointer++;
+                    tokenized.add(plus());
+
+                    if ( (exparray[pointer] == '-') || (tr.getType(exparray[pointer]).equals("Number")) ) {
+                        pointer++;
+                        tokenized.add(operand());
+                    }
+                }
+
+                if( exparray[pointer] == '-' ){
+                    pointer++;
+                    tokenized.add(minus());
+
+                    if ( (exparray[pointer] == '-') || (tr.getType(exparray[pointer]).equals("Number")) ) {
+                        pointer++;
+                        tokenized.add(operand());
+                    }
+                }
+
+
+                if( exparray[pointer] == '*' ){
+                    pointer++;
+                    tokenized.add(mul());
+                }
+                if( exparray[pointer] == '/' ){
+                    pointer++;
+                    tokenized.add(div());
+                }
+                if (exparray[pointer] == 's'){
+                    pointer++;
+                    tokenized.add(sin());
+                }
+                if (exparray[pointer] == 'c'){
+                    pointer++;
+                    tokenized.add(cos());
+                }
+                if (exparray[pointer] == 't'){
+                    pointer++;
+                    tokenized.add(tan());
+                }
+                if (exparray[pointer] == 'l'){
+                    pointer++;
+                    tokenized.add(log());
+                }
+            }
+            else
+            {
+                System.out.println("Wrong literal !");
+                System.exit(0);
             }
 
-            if( exparray[pointer] == ')' ){
-                pointer++;
-                tokenized.add(rightParen());
-            }
-            if( exparray[pointer] == '+' ){
-                pointer++;
-                tokenized.add(plus());
-            }
-            if ( (exparray[pointer] == '-') || (letter.getType(exparray[pointer]).equals("Number")) ) {  //should be checked before solely minus
-                pointer++;
-                tokenized.add(operand());
-            }
-            if( exparray[pointer] == '-' ){                                      // should be checked after operand condition
-                pointer++;
-                tokenized.add(minus());
-            }
-            if ( (exparray[pointer] == '-') || (letter.getType(exparray[pointer]).equals("Number")) ) {  //should be checked before solely minus
-                pointer++;
-                tokenized.add(operand());
-            }
-
-            if( exparray[pointer] == '*' ){
-                pointer++;
-                tokenized.add(mul());
-            }
-            if( exparray[pointer] == '/' ){
-                pointer++;
-                tokenized.add(div());
-            }
-            if (exparray[pointer] == 's'){
-                pointer++;
-                tokenized.add(sin());
-            }
-            if (exparray[pointer] == 'c'){
-                pointer++;
-                tokenized.add(cos());
-            }
-            if (exparray[pointer] == 't'){
-                pointer++;
-                tokenized.add(tan());
-            }
-            if (exparray[pointer] == 'l'){
-                pointer++;
-                tokenized.add(log());
-            }
 
         }
     }
 
-    public  Lexer(String a) {
-        expression = a;
+    public  Lexer(String exp) {
+        expression = exp;
         exparray = expression.toCharArray();
         tokenized = new ArrayList<Token>();
-        letter = new Letters();
+        tr = new Letters();
         pointer = 0;
+        at = new HashSet<>(Arrays.asList('+','-','*','/','(',')','s','c','t','l'));
     }
 
     public ArrayList<Token> getTokenized() {
+
         return tokenized;
     }
 }
+

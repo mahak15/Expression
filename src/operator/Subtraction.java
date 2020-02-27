@@ -2,10 +2,7 @@ package operator;
 
 
     public class Subtraction extends operator {
-        public Subtraction(){
-            this.precedence=2;
-            this.leftAssociative=true;
-        }
+
 
 
         @Override
@@ -14,7 +11,7 @@ package operator;
         }
 
         @Override
-        public Double solve(double a) {
+        public Double Solve(double a) {
             return a-1;
         }
     }

@@ -1,5 +1,8 @@
+
+
 package grammar;
 
+import operator.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,8 +11,11 @@ public class Node {
     Boolean isLeaf;
     int childCount;
     Map<String,Node> ch;
+    Map<String, operator> ops;
 
-
+    public Boolean checkType(String a){
+        return  data.tokCheckType(a);
+    }
     public Boolean addChild(String a,Node b){
 
         if(childCount > 0) {
@@ -46,28 +52,84 @@ public class Node {
         }
         return new Node(new Token("lol","lol"));
     }
+    public Token getData(){
+        return data;
+    }
+    public void printTree(){
+        if (childCount == 2){
+            if(ch.containsKey("left")) ch.get("left").printTree();
+            System.out.println(data.tokToString());
+            if(ch.containsKey("right")) ch.get("right").printTree();
+        }
+        if (childCount == 1){
+            if(ch.containsKey("only")) ch.get("only").printTree();
+            System.out.println(data.tokToString());
+        }
+        if (childCount == 0){
+            System.out.println(data.tokToString());
+        }
+    }
+
+    public Double eval(){
+        if (childCount == 2) {
+            Double left = 0.0, right = 0.0;
+            if (ch.containsKey("left")) left = ch.get("left").eval();
+            if (ch.containsKey("right")) right = ch.get("right").eval();
+            return ops.get(data.getValue()).Solve(left, right);
+        }
+        if (childCount == 1) {
+            Double only = 0.0;
+            if (ch.containsKey("only")) only = ch.get("only").eval();
+            return ops.get(data.getValue()).Solve(only);
+        }
+        if (childCount == 0) {
+            return Double.parseDouble(data.getValue());
+        }
+        return  0.0;
+    }
+
+
     public Node(Token a){
         data = a;
-        if(a.type.equals("operand")){
+        if(a.tokCheckType("operand")){
             isLeaf = true;
             childCount = 0;
         }
-        else if(a.type.equals("operator")){
+        else if(a.tokCheckType("operator")){
             isLeaf = false;
             childCount = 2;
         }
-        else if(a.type.equals("trigonometric")){
+        else if(a.tokCheckType("trigonometric")){
             isLeaf = false;
             childCount = 1;
         }
-        else if(a.type.equals("logarithmic")){
+        else if(a.tokCheckType("logarithmic")){
             isLeaf = false;
             childCount = 1;
         }
-        else
+        else if (a.tokCheckType("root")){
+            isLeaf = false;
+            childCount = 1;
+        }
+        else if(a.tokCheckType("lol")){
+            isLeaf = false;
+            childCount = -1;
+        }
+        else{
             System.out.println("Tree Error  !!");
+        }
+
         ch = new HashMap<>();
+        ops = new HashMap<>();
+        ops.put("+",new Addition());
+        ops.put("-",new Subtraction());
+        ops.put("*",new Multiplication());
+        ops.put("/",new Division());
+        ops.put("sin",new Sin());
+        ops.put("cos",new Cos());
+        ops.put("tan",new Tan());
+        ops.put("log",new Log());
+        ops.put("root",new Identity());
     }
 
 }
-

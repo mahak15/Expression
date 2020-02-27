@@ -7,6 +7,7 @@ public class Main {
     }
     public static void printResult(Double result)
     {
+
         System.out.println("Result of given expression is ="+result);
     }
 

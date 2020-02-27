@@ -2,10 +2,6 @@ package operator;
 
 
 public class Cos extends operator {
-    public Cos(){
-        this.precedence=0;
-        this.leftAssociative=true;
-    }
 
 
     @Override
@@ -14,7 +10,7 @@ public class Cos extends operator {
     }
 
     @Override
-    public Double solve(double a) {
+    public Double Solve(double a) {
         return Math.cos(a);
     }
 }
