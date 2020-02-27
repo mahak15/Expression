@@ -13,7 +13,9 @@ public class Lexer {
     int pointer;
 
     enum opState{
-        OPw,OPd,accept
+        OPw // 1,2,3
+        ,OPd
+        ,accept
     };
     Token operand() {
         Token operand = new Token("operand","");
@@ -399,5 +401,6 @@ public class Lexer {
 
         return tokenized;
     }
+
 }
 

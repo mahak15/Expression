@@ -6,6 +6,7 @@ import java.util.*;
 public class Controller {
 
     String expression;
+    Double result;
 
     Controller(String exp) {
 
@@ -26,7 +27,13 @@ public class Controller {
         System.out.println(parse.isValid());
         System.out.println(parse.getAST());
         parse.printAST();
-        return parse.getValue();
-
+        if(parse.getValue() == -0.0)
+        {
+            result= 0.0;
+        }
+        else{
+            result= parse.getValue();
+        }
+        return result;
     }
 }
